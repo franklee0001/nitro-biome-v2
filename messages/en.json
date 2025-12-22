@@ -1,0 +1,127 @@
+{
+    "nav": {
+        "hero": "Home",
+        "mechanism": "Science",
+        "evidence": "Evidence",
+        "product": "How to Use",
+        "faq": "FAQ",
+        "contact": "Contact"
+    },
+    "header": {
+        "cta": "Contact Us"
+    },
+    "hero": {
+        "headline": "A fast NO activation flow you can feel.",
+        "subheadline": "Fermentation-based metabolites + nanobubble delivery.",
+        "cta": "See the mechanism",
+        "scrollHint": "Scroll to continue"
+    },
+    "mechanism": {
+        "title": "The Mechanism",
+        "subtitle": "What happens inside your body after intake",
+        "scenes": {
+            "intake": {
+                "title": "Intake",
+                "description": "Right after intake, the precursor flow that opens the NO pathway begins."
+            },
+            "conversion": {
+                "title": "Conversion",
+                "description": "The conversion steps toward NO progress quickly."
+            },
+            "vessel": {
+                "title": "Vessel Response",
+                "description": "Vessels relax, allowing flow to widen."
+            },
+            "flow": {
+                "title": "Flow & Warmth",
+                "description": "Peripheral circulation changes can be felt as warmth."
+            },
+            "sustain": {
+                "title": "Sustain",
+                "description": "Your body aligns toward a steadier flow rhythm."
+            }
+        }
+    },
+    "evidence": {
+        "title": "Real Data",
+        "subtitle": "Verified results without exaggeration",
+        "cards": {
+            "bloodPressure": {
+                "title": "Blood Pressure",
+                "value": "-16 / -13",
+                "unit": "mmHg",
+                "description": "Average change after 15 min: Systolic -16 / Diastolic -13 mmHg",
+                "note": "(n=12)"
+            },
+            "temperature": {
+                "title": "Skin Temperature",
+                "value": "+0.52",
+                "unit": "°C",
+                "description": "Average peripheral skin temperature increase",
+                "note": ""
+            },
+            "concentration": {
+                "title": "Concentration",
+                "value": "188 / 4,374",
+                "unit": "ppm",
+                "description": "Nitrate 188 ppm / Nitrite 4,374 ppm",
+                "note": ""
+            }
+        }
+    },
+    "product": {
+        "title": "Product Info",
+        "subtitle": "Simple intake method",
+        "howTo": "How to Use"
+    },
+    "faq": {
+        "title": "Frequently Asked Questions",
+        "questions": {
+            "timing": {
+                "q": "When can I feel the effects?",
+                "a": "Individual results vary, but many users feel warmth or improved circulation within 5-15 minutes after intake."
+            },
+            "howToTake": {
+                "q": "How and when should I take it?",
+                "a": "Mix one stick with 200ml of water. We recommend taking it on an empty stomach in the morning or before exercise."
+            },
+            "daily": {
+                "q": "Should I take it every day?",
+                "a": "For optimal results, we recommend taking it regularly every day."
+            },
+            "mealTiming": {
+                "q": "Should I take it on an empty stomach? Can I take it after meals?",
+                "a": "Taking it on an empty stomach allows for faster absorption, but you can also take it after meals."
+            },
+            "caution": {
+                "q": "Are there any precautions?",
+                "a": "If you are taking blood pressure medication or have specific health conditions, please consult your doctor before use."
+            },
+            "normalResponse": {
+                "q": "What are normal responses?",
+                "a": "Warmth, mild facial flushing, and sensation of vessel dilation are normal NO activation responses."
+            }
+        }
+    },
+    "contact": {
+        "title": "Contact Us",
+        "subtitle": "Leave us your questions",
+        "form": {
+            "name": "Name",
+            "email": "Email",
+            "purpose": "Purpose",
+            "purposeOptions": {
+                "personal": "Personal Purchase",
+                "b2b": "B2B / Partnership",
+                "other": "Other"
+            },
+            "message": "Message",
+            "submit": "Send Inquiry",
+            "success": "Your inquiry has been submitted. Thank you!",
+            "error": "An error occurred. Please try again."
+        }
+    },
+    "footer": {
+        "copyright": "© 2025 NitroBiome. All rights reserved."
+    }
+}

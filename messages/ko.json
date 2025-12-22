@@ -1,0 +1,127 @@
+{
+    "nav": {
+        "hero": "홈",
+        "mechanism": "작동 원리",
+        "evidence": "근거 데이터",
+        "product": "사용법",
+        "faq": "자주 묻는 질문",
+        "contact": "문의하기"
+    },
+    "header": {
+        "cta": "문의하기"
+    },
+    "hero": {
+        "headline": "5분 안에 느껴지는 NO 활성 흐름.",
+        "subheadline": "발효 기반 대사물 + 나노버블 전달",
+        "cta": "작동 원리 보기",
+        "scrollHint": "스크롤하여 계속"
+    },
+    "mechanism": {
+        "title": "작동 메커니즘",
+        "subtitle": "섭취 후 몸 안에서 일어나는 일",
+        "scenes": {
+            "intake": {
+                "title": "섭취",
+                "description": "섭취 직후, NO 경로를 여는 '전구물질 흐름'이 시작됩니다."
+            },
+            "conversion": {
+                "title": "전환",
+                "description": "NO로 이어지는 전환 단계가 빠르게 이어집니다."
+            },
+            "vessel": {
+                "title": "혈관 반응",
+                "description": "혈관이 이완되며 흐름이 넓어집니다."
+            },
+            "flow": {
+                "title": "순환 & 따뜻함",
+                "description": "말초 순환 변화는 '따뜻함'으로 체감되기도 합니다."
+            },
+            "sustain": {
+                "title": "지속",
+                "description": "몸이 '흐름의 리듬'을 되찾는 방향으로 정렬됩니다."
+            }
+        }
+    },
+    "evidence": {
+        "title": "실제 데이터",
+        "subtitle": "과장 없이 검증된 결과",
+        "cards": {
+            "bloodPressure": {
+                "title": "혈압 변화",
+                "value": "-16 / -13",
+                "unit": "mmHg",
+                "description": "15분 후 평균 변화: 수축기 -16 / 이완기 -13 mmHg",
+                "note": "(n=12)"
+            },
+            "temperature": {
+                "title": "체표 온도",
+                "value": "+0.52",
+                "unit": "°C",
+                "description": "말초 피부 온도 평균 상승",
+                "note": ""
+            },
+            "concentration": {
+                "title": "농도",
+                "value": "188 / 4,374",
+                "unit": "ppm",
+                "description": "질산염 188 ppm / 아질산염 4,374 ppm",
+                "note": ""
+            }
+        }
+    },
+    "product": {
+        "title": "제품 정보",
+        "subtitle": "간편한 섭취 방법",
+        "howTo": "사용 방법"
+    },
+    "faq": {
+        "title": "자주 묻는 질문",
+        "questions": {
+            "timing": {
+                "q": "언제부터 체감할 수 있나요?",
+                "a": "개인차가 있지만, 많은 사용자가 섭취 후 5-15분 내에 따뜻함이나 순환 개선을 느낍니다."
+            },
+            "howToTake": {
+                "q": "어떻게, 언제 섭취하나요?",
+                "a": "스틱 1개를 200ml 물에 타서 섭취합니다. 아침 공복 또는 운동 전을 권장합니다."
+            },
+            "daily": {
+                "q": "매일 섭취해야 하나요?",
+                "a": "최상의 효과를 위해 매일 규칙적으로 섭취하는 것을 권장합니다."
+            },
+            "mealTiming": {
+                "q": "공복에 먹어야 하나요? 식후에 먹어도 되나요?",
+                "a": "공복 섭취 시 흡수가 빠르지만, 식후에도 섭취 가능합니다."
+            },
+            "caution": {
+                "q": "주의해야 할 대상이 있나요?",
+                "a": "혈압약 복용 중이거나 특정 질환이 있는 경우 의사와 상담 후 섭취하세요."
+            },
+            "normalResponse": {
+                "q": "정상적인 체감 반응은 어떤가요?",
+                "a": "따뜻함, 가벼운 얼굴 홍조, 혈관 확장감 등이 정상적인 NO 활성화 반응입니다."
+            }
+        }
+    },
+    "contact": {
+        "title": "문의하기",
+        "subtitle": "궁금하신 점을 남겨주세요",
+        "form": {
+            "name": "이름",
+            "email": "이메일",
+            "purpose": "문의 목적",
+            "purposeOptions": {
+                "personal": "개인 구매",
+                "b2b": "B2B / 제휴",
+                "other": "기타"
+            },
+            "message": "메시지",
+            "submit": "문의 보내기",
+            "success": "문의가 접수되었습니다. 감사합니다!",
+            "error": "오류가 발생했습니다. 다시 시도해주세요."
+        }
+    },
+    "footer": {
+        "copyright": "© 2025 NitroBiome. All rights reserved."
+    }
+}

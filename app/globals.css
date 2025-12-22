@@ -1,0 +1,121 @@
+@import "tailwindcss";
+
+/* ============================================
+   NitroBiome Design Tokens (from PRD)
+   ============================================ */
+
+:root {
+  /* Background - warm ivory/beige */
+  --bg-primary: #FAF8F3;
+  --bg-secondary: #F5F2ED;
+  
+  /* Green - olive/deep green */
+  --green-primary: #3D5C25;
+  --green-deep: #283417;
+  --green-light: #4A6E2E;
+  
+  /* Text - near black to muted */
+  --text-primary: #1A1A1A;
+  --text-secondary: #4A4A4A;
+  --text-muted: #6B6B6B;
+  
+  /* Utility */
+  --white: #FFFFFF;
+  --black: #000000;
+  --accent-warm: #D4A574;
+}
+
+@theme inline {
+  /* Map to Tailwind variables */
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-green-primary: var(--green-primary);
+  --color-green-deep: var(--green-deep);
+  --color-green-light: var(--green-light);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+}
+
+/* ============================================
+   Global Styles
+   ============================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Disable smooth scroll for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Smooth scroll with Lenis */
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+
+.section {
+  min-height: 100vh;
+  position: relative;
+}
+
+.container-custom {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+@media (max-width: 768px) {
+  .container-custom {
+    padding: 0 1rem;
+  }
+}
