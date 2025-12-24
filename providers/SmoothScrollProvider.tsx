@@ -38,23 +38,22 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
         // Connect Lenis to GSAP ScrollTrigger
         lenis.on('scroll', ScrollTrigger.update);
 
-        // Add Lenis to GSAP ticker (avoid duplicate ticker)
-        gsap.ticker.add((time) => {
+        // Define ticker function for adding/removing
+        const updateLenis = (time: number) => {
             lenis.raf(time * 1000);
-        });
+        };
+
+        // Add Lenis to GSAP ticker (avoid duplicate ticker)
+        gsap.ticker.add(updateLenis);
 
         // Disable GSAP's default lag smoothing to prevent conflicts
         gsap.ticker.lagSmoothing(0);
 
         // Cleanup
         return () => {
+            gsap.ticker.remove(updateLenis);
             lenis.destroy();
             lenisRef.current = null;
-
-            // Remove from GSAP ticker
-            gsap.ticker.remove((time) => {
-                lenis.raf(time * 1000);
-            });
         };
     }, []);
 

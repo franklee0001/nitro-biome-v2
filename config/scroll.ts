@@ -8,13 +8,28 @@ export const scrollConfig = {
 
     // GSAP ScrollTrigger settings
     scrollTrigger: {
-        // Hero video scroll range (viewport units)
+        // Hero video base scroll distance (viewport height units)
+        heroBaseScrollDistanceVh: 300,
+
+        // Additional vh per second of video duration (dynamic scroll)
+        heroScrollPerSecondVh: 25,
+
+        // Hero scrub damping for ScrollTrigger (1.0–2.2, higher = more lag)
+        heroScrub: 1.8,
+
+        // RAF-based damping lerp factor (0.0–1.0, lower = smoother but laggier)
+        heroDampingLerp: 0.08,
+
+        // Hero video scroll range (deprecated, use heroBaseScrollDistanceVh)
         heroScrollRange: 1.5,
+
+        // Legacy static value (deprecated)
+        heroScrollDistanceVh: 420,
 
         // Mechanism pin duration (viewport units)
         mechanismPinDuration: 5,
 
-        // Smooth scrub value
+        // Smooth scrub value (general)
         scrub: true,
     },
 

@@ -19,51 +19,46 @@ export function FAQ({ messages }: FAQProps) {
     };
 
     return (
-        <section id="faq" className="section py-20 lg:py-32">
+        <section id="faq" className="section py-32 bg-[var(--color-bg-primary)]">
             <Container>
-                <div className="text-center mb-16">
-                    <h2 className="text-3xl lg:text-4xl font-bold text-[var(--text-primary)] mb-4">
+                <div className="text-center mb-24">
+                    <h2 className="text-display-md text-[var(--color-text-primary)]">
                         {messages.faq.title}
                     </h2>
                 </div>
 
-                <div className="max-w-3xl mx-auto space-y-4">
+                <div className="max-w-4xl mx-auto border-t border-[var(--color-text-muted)]/10">
                     {questions.map(([key, qa], index) => {
                         const isOpen = openIndex === index;
 
                         return (
                             <div
                                 key={key}
-                                className="bg-white border border-[var(--bg-secondary)] rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-md"
+                                className="border-b border-[var(--color-text-muted)]/10"
                             >
                                 <button
                                     onClick={() => toggleQuestion(index)}
-                                    onKeyDown={(e) => {
-                                        if (e.key === 'Enter' || e.key === ' ') {
-                                            e.preventDefault();
-                                            toggleQuestion(index);
-                                        }
-                                    }}
-                                    className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none focus:ring-2 focus:ring-[var(--green-primary)] focus:ring-inset"
+                                    className="w-full py-10 flex items-start justify-between text-left group focus:outline-none"
                                     aria-expanded={isOpen}
                                 >
-                                    <span className="font-semibold text-[var(--text-primary)] pr-4">
+                                    <span className={`text-2xl lg:text-3xl font-medium tracking-tight transition-colors duration-500 pr-12 ${isOpen ? 'text-[var(--color-green-primary)]' : 'text-[var(--color-text-primary)] group-hover:text-[var(--color-green-primary)]'
+                                        }`}>
                                         {qa.q}
                                     </span>
-                                    <ChevronDown
-                                        className={`flex-shrink-0 text-[var(--green-primary)] transition-transform duration-300 ${isOpen ? 'rotate-180' : ''
-                                            }`}
-                                        size={20}
-                                    />
+                                    <div className={`mt-2 flex-shrink-0 w-8 h-8 rounded-full border border-[var(--color-text-muted)]/20 flex items-center justify-center transition-all duration-500 ${isOpen ? 'bg-[var(--color-green-primary)] border-[var(--color-green-primary)] text-white rotate-180' : 'text-[var(--color-text-muted)] group-hover:border-[var(--color-green-primary)] group-hover:text-[var(--color-green-primary)]'
+                                        }`}>
+                                        <ChevronDown size={20} />
+                                    </div>
                                 </button>
 
-                                {isOpen && (
-                                    <div className="px-6 pb-5">
-                                        <p className="text-[var(--text-secondary)] leading-relaxed">
-                                            {qa.a}
-                                        </p>
-                                    </div>
-                                )}
+                                <div
+                                    className={`overflow-hidden transition-all duration-700 ease-[var(--ease-apple)] ${isOpen ? 'max-h-96 opacity-100 pb-10' : 'max-h-0 opacity-0'
+                                        }`}
+                                >
+                                    <p className="text-xl text-[var(--color-text-secondary)] leading-relaxed max-w-3xl opacity-80 pl-2 border-l-2 border-[var(--color-green-primary)]/20 ml-1">
+                                        {qa.a}
+                                    </p>
+                                </div>
                             </div>
                         );
                     })}

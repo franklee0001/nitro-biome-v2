@@ -1,0 +1,6 @@
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="600" fill="#F5F2ED"/>
+  <circle cx="400" cy="300" r="120" stroke="#3D5C25" stroke-width="2" stroke-dasharray="10 5"/>
+  <text x="400" y="300" text-anchor="middle" dominant-baseline="middle" fill="#3D5C25" font-family="sans-serif" font-size="24">Scene 2: NO3 → NO2 → NO</text>
+  <text x="400" y="340" text-anchor="middle" fill="#4A6E2E" font-family="sans-serif" font-size="16">Conversion Process</text>
+</svg>

@@ -27,16 +27,11 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     const messages = await getMessages(locale as Locale);
 
     return (
-        <html lang={locale}>
-            <head>
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
-            </head>
-            <body>
-                <SmoothScrollProvider>
-                    <Header messages={messages} />
-                    <main>{children}</main>
-                </SmoothScrollProvider>
-            </body>
-        </html>
+        <SmoothScrollProvider>
+            <Header messages={messages} />
+            <main>{children}</main>
+        </SmoothScrollProvider>
     );
 }
+
+

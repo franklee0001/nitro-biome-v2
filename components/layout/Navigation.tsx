@@ -22,21 +22,36 @@ export function Navigation({ messages, activeSection, mobile = false, onNavClick
     };
 
     const navClassName = mobile
-        ? 'flex flex-col gap-6 text-center'
-        : 'hidden lg:flex items-center gap-8';
+        ? 'flex flex-col gap-8 text-center items-center w-full'
+        : 'hidden lg:flex items-center gap-10';
 
-    const linkBaseClassName = 'text-sm font-medium transition-all duration-200 relative';
+    // Base link style
+    const linkBaseClassName = 'relative transition-colors duration-300 ease-out';
+
+    // Premium animated underline for Desktop
+    // Using simple pseudo-element animation
+    const desktopHoverClass = 'after:content-[""] after:absolute after:left-0 after:-bottom-1 after:w-full after:h-[1px] after:bg-[var(--color-green-primary)] after:origin-right after:scale-x-0 after:transition-transform after:duration-300 hover:after:origin-left hover:after:scale-x-100 hover:text-[var(--color-text-primary)]';
 
     return (
         <nav className={navClassName}>
             {sections.slice(1).map((section) => {
                 const isActive = activeSection === section.id;
-                const linkClassName = mobile
-                    ? `${linkBaseClassName} ${isActive ? 'text-[var(--green-primary)]' : 'text-[var(--text-primary)] hover:text-[var(--green-primary)]'} text-lg`
-                    : `${linkBaseClassName} ${isActive
-                        ? 'text-[var(--green-primary)] after:absolute after:bottom-[-4px] after:left-0 after:w-full after:h-[2px] after:bg-[var(--green-primary)]'
-                        : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                    }`;
+
+                let linkClassName = '';
+
+                if (mobile) {
+                    // Mobile: Larger text, simple color change
+                    linkClassName = `text-2xl font-medium ${isActive
+                        ? 'text-[var(--color-green-primary)]'
+                        : 'text-[var(--color-text-primary)]'
+                        }`;
+                } else {
+                    // Desktop: text-navigation, premium hover
+                    linkClassName = `${linkBaseClassName} ${desktopHoverClass} text-navigation ${isActive
+                        ? 'text-[var(--color-text-primary)] after:scale-x-100 after:origin-left'
+                        : 'text-[var(--color-text-secondary)]'
+                        }`;
+                }
 
                 return (
                     <Link

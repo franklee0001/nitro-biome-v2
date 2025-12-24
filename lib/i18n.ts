@@ -22,6 +22,9 @@ export type Messages = {
     nav: Record<string, string>;
     header: Record<string, string>;
     hero: Record<string, string>;
+    noPrimer: {
+        steps: string[];
+    };
     mechanism: {
         title: string;
         subtitle: string;
@@ -59,6 +62,7 @@ export type Messages = {
             submit: string;
             success: string;
             error: string;
+            trust: string;
         };
     };
     footer: Record<string, string>;
