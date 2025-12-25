@@ -123,13 +123,6 @@ export function Contact({ messages }: ContactProps) {
                         </form>
                     </div>
                 </div>
-
-                {/* Footer Copyright */}
-                <div className="mt-32 pt-12 border-t border-[var(--color-text-muted)]/10 text-center">
-                    <p className="text-sm text-[var(--color-text-muted)] font-medium tracking-widest uppercase">
-                        {messages.footer.copyright}
-                    </p>
-                </div>
             </Container>
         </section>
     );

@@ -13,6 +13,7 @@ export function LanguageToggle() {
     useEffect(() => {
         // Extract locale from pathname
         const locale = pathname.split('/')[1] as Locale;
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setCurrentLocale(locale);
     }, [pathname]);
 
@@ -37,8 +38,8 @@ export function LanguageToggle() {
                 onClick={() => switchLocale('ko')}
                 aria-pressed={currentLocale === 'ko'}
                 className={`px-3 py-1 text-sm font-medium rounded-full transition-all duration-200 ${currentLocale === 'ko'
-                        ? 'bg-[var(--green-primary)] text-white'
-                        : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                    ? 'bg-[var(--green-primary)] text-white'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                     }`}
             >
                 KR
@@ -47,8 +48,8 @@ export function LanguageToggle() {
                 onClick={() => switchLocale('en')}
                 aria-pressed={currentLocale === 'en'}
                 className={`px-3 py-1 text-sm font-medium rounded-full transition-all duration-200 ${currentLocale === 'en'
-                        ? 'bg-[var(--green-primary)] text-white'
-                        : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                    ? 'bg-[var(--green-primary)] text-white'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                     }`}
             >
                 EN

@@ -6,6 +6,7 @@ import { Evidence } from '@/components/sections/Evidence';
 import { Product } from '@/components/sections/Product';
 import { FAQ } from '@/components/sections/FAQ';
 import { Contact } from '@/components/sections/Contact';
+import { Footer } from '@/components/sections/Footer';
 
 interface PageProps {
     params: Promise<{ locale: string }>;
@@ -24,6 +25,7 @@ export default async function Page({ params }: PageProps) {
             <Product messages={messages} />
             <FAQ messages={messages} />
             <Contact messages={messages} />
+            <Footer messages={messages} />
         </>
     );
 }

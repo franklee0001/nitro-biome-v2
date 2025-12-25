@@ -10,10 +10,13 @@ interface HeroProps {
 }
 
 export function Hero({ messages }: HeroProps) {
+    const [isMounted, setIsMounted] = useState(false);
     const [isDesktop, setIsDesktop] = useState(false);
     const [reducedMotion, setReducedMotion] = useState(false);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setIsMounted(true);
         const checkDesktop = () => setIsDesktop(window.matchMedia('(min-width: 1024px)').matches);
         const checkMotion = () => setReducedMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
         checkDesktop();
@@ -22,7 +25,7 @@ export function Hero({ messages }: HeroProps) {
         return () => window.removeEventListener('resize', checkDesktop);
     }, []);
 
-    const scrollScrubEnabled = isDesktop && !reducedMotion;
+    const scrollScrubEnabled = isMounted && isDesktop && !reducedMotion;
     const { wrapperRef, pinRef, videoRef } = useHeroScrollVideo({ enabled: scrollScrubEnabled });
 
     const handleCTAClick = () => {
@@ -44,10 +47,10 @@ export function Hero({ messages }: HeroProps) {
             className="relative w-full bg-[var(--color-bg-primary)]"
             style={{ minHeight: wrapperHeight }}
         >
-            {/* Pinned viewport layer */}
+            {/* Pinned viewport layer - pinned by ScrollTrigger, not CSS sticky */}
             <div
                 ref={pinRef}
-                className="sticky top-0 h-screen w-full overflow-hidden"
+                className="relative top-0 h-screen w-full overflow-hidden"
             >
                 {/* Video Background */}
                 <video
@@ -59,7 +62,6 @@ export function Hero({ messages }: HeroProps) {
                     playsInline
                     preload="auto"
                     className="absolute inset-0 w-full h-full object-cover"
-                    poster="/hero/poster.webp"
                 />
 
                 {/* Gradient Overlay */}
@@ -80,7 +82,7 @@ export function Hero({ messages }: HeroProps) {
                     </div>
                 </div>
 
-                {/* Scroll Hint (Desktop) */}
+                {/* Scroll Hint (Desktop) - Only show after mount */}
                 {scrollScrubEnabled && (
                     <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[var(--color-text-muted)] animate-bounce z-10">
                         <span className="text-xs font-medium uppercase tracking-widest">Scroll</span>
@@ -88,8 +90,8 @@ export function Hero({ messages }: HeroProps) {
                     </div>
                 )}
 
-                {/* Scroll Hint (Mobile) */}
-                {!isDesktop && (
+                {/* Scroll Hint (Mobile) - Only show after mount */}
+                {isMounted && !isDesktop && (
                     <p className="absolute bottom-6 left-0 right-0 text-center text-sm text-[var(--color-text-muted)] animate-bounce z-10">
                         {messages.hero.scrollHint}
                     </p>
