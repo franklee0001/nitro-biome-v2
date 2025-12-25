@@ -1,6 +1,7 @@
 import { getMessages, type Locale } from '@/lib/i18n';
 import { Hero } from '@/components/sections/Hero';
 import { NOPrimer } from '@/components/sections/NOPrimer';
+import { JourneySection } from '@/components/sections/JourneySection';
 import { Mechanism } from '@/components/sections/Mechanism';
 import { Evidence } from '@/components/sections/Evidence';
 import { Product } from '@/components/sections/Product';
@@ -20,6 +21,7 @@ export default async function Page({ params }: PageProps) {
         <>
             <Hero messages={messages} />
             <NOPrimer messages={messages} />
+            <JourneySection messages={messages} />
             <Mechanism messages={messages} />
             <Evidence messages={messages} />
             <Product messages={messages} />

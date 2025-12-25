@@ -1,7 +1,7 @@
 'use client';
 
 import { Messages } from '@/lib/i18n';
-import { useEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -15,8 +15,16 @@ interface NOPrimerProps {
 }
 
 // CONSTANTS: Fixed item heights for proper stacking
-const HEADLINE_ITEM_HEIGHT = 450; // px
-const CARD_ITEM_HEIGHT = 280; // px
+const HEADLINE_ITEM_HEIGHT = 400; // px - slightly reduced for better fit
+const CARD_ITEM_HEIGHT = 260; // px
+
+// Animation constants
+const BG_SCALE_START = 1.06;
+const BG_SCALE_END = 1.18;
+const BG_YOFFSET_START = -6;
+const BG_YOFFSET_END = 6;
+const CARD_DRIFT = 56;
+const SCROLL_DURATION = '+=420%'; // 4.2x viewport height for 4 steps
 
 export function NOPrimer({ messages }: NOPrimerProps) {
     const sectionRef = useRef<HTMLElement>(null);
@@ -46,8 +54,8 @@ export function NOPrimer({ messages }: NOPrimerProps) {
         };
     }, []);
 
-    // GSAP Animation Setup
-    useEffect(() => {
+    // GSAP Animation Setup - useLayoutEffect for DOM measurements
+    useLayoutEffect(() => {
         if (!sectionRef.current) return;
 
         const ctx = gsap.context(() => {
@@ -57,81 +65,84 @@ export function NOPrimer({ messages }: NOPrimerProps) {
                 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
                 if (reducedMotion) return;
 
-                // 1. Initial State
-                if (bgRef.current) gsap.set(bgRef.current, { scale: 1.05, yPercent: -6 });
-                if (cardContainerRef.current) gsap.set(cardContainerRef.current, { y: 0 });
-                if (headlineStackRef.current) gsap.set(headlineStackRef.current, { y: 0 });
-                if (cardStackRef.current) gsap.set(cardStackRef.current, { y: 0 });
+                const section = sectionRef.current;
+                const bg = bgRef.current;
+                const cardContainer = cardContainerRef.current;
+                const headlineStack = headlineStackRef.current;
+                const cardStack = cardStackRef.current;
+
+                if (!section || !bg || !cardContainer || !headlineStack || !cardStack) {
+                    console.warn('[NOPrimer] Missing refs for animation');
+                    return;
+                }
+
+                // 1. Set initial states explicitly
+                gsap.set(bg, { scale: BG_SCALE_START, yPercent: BG_YOFFSET_START });
+                gsap.set(cardContainer, { y: 0 });
+                gsap.set(headlineStack, { y: 0 });
+                gsap.set(cardStack, { y: 0 });
 
                 // 2. Build the Master Timeline
-                const tl = gsap.timeline({ paused: true });
+                // Using labels for precise step timing
+                const tl = gsap.timeline();
 
-                // Background Parallax (Linear)
-                if (bgRef.current) {
-                    tl.to(bgRef.current, {
-                        yPercent: 6,
-                        ease: 'none',
-                        duration: 1,
-                    }, 0);
+                // Calculate step boundaries (each step gets equal portion)
+                const stepDuration = 1 / stepCount;
+
+                // Add labels for each step
+                for (let i = 0; i < stepCount; i++) {
+                    tl.addLabel(`step${i}`, i * stepDuration);
                 }
+                tl.addLabel('end', 1);
 
-                // Card Container Drift
-                if (cardContainerRef.current) {
-                    tl.to(cardContainerRef.current, {
-                        y: 56,
-                        ease: 'none',
-                        duration: 1,
-                    }, 0);
-                }
+                // Background: Continuous parallax and scale throughout
+                tl.fromTo(bg,
+                    { yPercent: BG_YOFFSET_START, scale: BG_SCALE_START },
+                    { yPercent: BG_YOFFSET_END, scale: BG_SCALE_END, ease: 'none', duration: 1 },
+                    0
+                );
 
-                // Stack Transitions
-                const stepSeg = 1 / stepCount;
+                // Card container: Gentle drift throughout
+                tl.fromTo(cardContainer,
+                    { y: 0 },
+                    { y: CARD_DRIFT, ease: 'none', duration: 1 },
+                    0
+                );
+
+                // Step transitions: Snap at each step boundary
+                // Transition duration as fraction of total (snappy feel)
+                const transitionDuration = 0.08; // 8% of each step = quick snap
 
                 for (let i = 1; i < stepCount; i++) {
-                    const targetProgress = i * stepSeg;
+                    const transitionStart = i * stepDuration - transitionDuration / 2;
 
-                    // Use pixel-based y instead of yPercent for robustness
                     const headlineShift = -i * HEADLINE_ITEM_HEIGHT;
                     const cardShift = -i * CARD_ITEM_HEIGHT;
 
-                    // "훅훅" Punch Zoom
-                    const nextScale = 1.05 + (i * 0.08);
+                    // Headline stack slides up
+                    tl.to(headlineStack, {
+                        y: headlineShift,
+                        ease: 'power2.inOut',
+                        duration: transitionDuration,
+                    }, transitionStart);
 
-                    if (headlineStackRef.current) {
-                        tl.to(headlineStackRef.current, {
-                            y: headlineShift,
-                            ease: 'power2.inOut',
-                            duration: 0.1,
-                        }, targetProgress);
-                    }
-
-                    if (cardStackRef.current) {
-                        tl.to(cardStackRef.current, {
-                            y: cardShift,
-                            ease: 'power2.inOut',
-                            duration: 0.1,
-                        }, targetProgress);
-                    }
-
-                    // Synced Background Punch Zoom
-                    if (bgRef.current) {
-                        tl.to(bgRef.current, {
-                            scale: nextScale,
-                            ease: 'power2.inOut',
-                            duration: 0.1,
-                        }, targetProgress);
-                    }
+                    // Card content stack slides up (synced)
+                    tl.to(cardStack, {
+                        y: cardShift,
+                        ease: 'power2.inOut',
+                        duration: transitionDuration,
+                    }, transitionStart);
                 }
 
-                // 3. Create ScrollTrigger
+                // 3. Create ScrollTrigger with the timeline
                 ScrollTrigger.create({
                     id: 'NOPrimer',
-                    trigger: sectionRef.current,
+                    trigger: section,
                     start: 'top top',
-                    end: '+=400%',
+                    end: SCROLL_DURATION,
                     pin: true,
                     pinSpacing: true,
-                    scrub: 1.2,
+                    scrub: 0.8, // Slightly faster scrub for more responsive feel
                     anticipatePin: 1,
                     animation: tl,
                     invalidateOnRefresh: true,
@@ -198,10 +209,10 @@ export function NOPrimer({ messages }: NOPrimerProps) {
                     </div>
 
                     {/* Center Headlines Mask */}
-                    <div className="absolute inset-0 z-10 flex items-center pointer-events-none">
-                        {/* Mask Container: Fixed height = 1 item height, positioned to avoid card */}
+                    <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+                        {/* Mask Container: Fixed height = 1 item height, offset left to avoid card overlap */}
                         <div
-                            className="relative w-full max-w-3xl px-8 ml-8 xl:ml-16 overflow-hidden"
+                            className="relative w-full max-w-2xl px-6 -translate-x-[10%] xl:-translate-x-[15%] overflow-hidden"
                             style={{ height: HEADLINE_ITEM_HEIGHT }}
                         >
                             {/* Stack Container: Total height = stepCount * item height */}
@@ -216,7 +227,7 @@ export function NOPrimer({ messages }: NOPrimerProps) {
                                         className="flex items-center justify-center px-4"
                                         style={{ height: HEADLINE_ITEM_HEIGHT, flexShrink: 0 }}
                                     >
-                                        <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white text-center leading-tight drop-shadow-2xl">
+                                        <h2 className="text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-bold text-white text-center leading-tight drop-shadow-2xl">
                                             {text}
                                         </h2>
                                     </div>
@@ -226,21 +237,21 @@ export function NOPrimer({ messages }: NOPrimerProps) {
                     </div>
 
                     {/* Right-side Glass Card Mask */}
-                    <div className="absolute inset-y-0 right-0 z-20 flex items-center pr-12 xl:pr-24 pointer-events-none">
+                    <div className="absolute inset-y-0 right-0 z-20 flex items-center pr-8 xl:pr-16 pointer-events-none">
                         <div
                             ref={cardContainerRef}
-                            className="relative w-[380px] xl:w-[460px] will-change-transform"
+                            className="relative w-[320px] xl:w-[340px] will-change-transform"
                         >
                             <div
-                                className="relative overflow-hidden rounded-[40px] border border-white/10 bg-black/30 backdrop-blur-2xl pointer-events-auto"
+                                className="relative overflow-hidden rounded-[32px] border border-white/10 bg-black/30 backdrop-blur-2xl pointer-events-auto"
                                 style={{
-                                    boxShadow: '0 40px 80px -20px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255,255,255,0.05) inset',
+                                    boxShadow: '0 32px 64px -16px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255,255,255,0.05) inset',
                                 }}
                             >
-                                <div className="p-10 xl:p-14 relative">
+                                <div className="p-8 xl:p-10 relative">
                                     {/* Icon Circle */}
-                                    <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mb-8 border border-white/5">
-                                        <svg className="w-6 h-6 text-white/70" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center mb-6 border border-white/5">
+                                        <svg className="w-5 h-5 text-white/70" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                                         </svg>
                                     </div>
@@ -262,10 +273,10 @@ export function NOPrimer({ messages }: NOPrimerProps) {
                                                     className="flex flex-col justify-start pt-2"
                                                     style={{ height: CARD_ITEM_HEIGHT, flexShrink: 0 }}
                                                 >
-                                                    <span className="text-xs font-bold tracking-[0.3em] uppercase text-white/40 block mb-6">
+                                                    <span className="text-xs font-bold tracking-[0.25em] uppercase text-white/40 block mb-4">
                                                         Step {String(i + 1).padStart(2, '0')}
                                                     </span>
-                                                    <p className="text-2xl xl:text-3xl font-medium leading-relaxed text-white/95">
+                                                    <p className="text-xl xl:text-2xl font-medium leading-relaxed text-white/95">
                                                         {text}
                                                     </p>
                                                 </div>
@@ -274,7 +285,7 @@ export function NOPrimer({ messages }: NOPrimerProps) {
                                     </div>
 
                                     {/* Decoration Progress Dots */}
-                                    <div className="mt-10 flex gap-4">
+                                    <div className="mt-8 flex gap-3">
                                         {steps.map((_, i) => (
                                             <div key={i} className="h-1 flex-1 rounded-full bg-white/20" />
                                         ))}

@@ -25,6 +25,13 @@ export type Messages = {
     noPrimer: {
         steps: string[];
     };
+    journey: {
+        headline: string;
+        cardLabel: string;
+        cardTitle: string;
+        cardDescription: string;
+        cta: string;
+    };
     mechanism: {
         title: string;
         subtitle: string;

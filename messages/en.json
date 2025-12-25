@@ -21,8 +21,15 @@
             "How old are your blood vessels?",
             "Nitric oxide (NO) helps signal your vessels to relax.",
             "When flow becomes smoother, peripheral circulation can feel different.",
-            "That’s why the nitrate → NO pathway matters for fast perceived response."
+            "That's why the nitrate → NO pathway matters for fast perceived response."
         ]
+    },
+    "journey": {
+        "headline": "A Journey Toward Youth",
+        "cardLabel": "Premium Formula",
+        "cardTitle": "Your Personal Vitality Solution",
+        "cardDescription": "Our scientifically designed NO booster transforms your day. Experience real change through the harmony of natural ingredients and advanced technology.",
+        "cta": "Learn More"
     },
     "mechanism": {
         "title": "The Mechanism",
