@@ -21,14 +21,11 @@ export function Footer({ messages }: FooterProps) {
                     <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-12 mb-16">
                         {/* Brand */}
                         <div className="space-y-4">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--color-green-primary)] to-[var(--color-green-deep)] flex items-center justify-center shadow-lg shadow-green-900/30">
-                                    <span className="text-white font-black text-lg">N</span>
-                                </div>
-                                <span className="text-xl font-bold text-white tracking-tight">
-                                    NitroBiome
-                                </span>
-                            </div>
+                            <img
+                                src="/images/nitro-logo.png"
+                                alt="NitroBiome"
+                                className="h-[84px] sm:h-[98px] w-auto brightness-0 invert"
+                            />
                             <p className="text-sm text-white/40 max-w-xs leading-relaxed">
                                 발효 기반 대사물과 나노버블 전달로 빠른 NO 활성 흐름을 설계합니다.
                             </p>

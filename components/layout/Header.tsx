@@ -99,17 +99,14 @@ export function Header({ messages }: HeaderProps) {
                 <div className="flex items-center justify-between">
                     {/* Logo */}
                     <Link
-                        href="#hero"
-                        className={`
-                            text-2xl font-bold tracking-tight
-                            transition-colors duration-300
-                            ${isScrolled
-                                ? 'text-[var(--color-green-deep)]'
-                                : 'text-[var(--color-green-deep)]'
-                            }
-                        `}
+                        href="/"
+                        className="relative block flex-shrink-0 transition-opacity duration-300 hover:opacity-80"
                     >
-                        NitroBiome
+                        <img
+                            src="/images/nitro-logo.png"
+                            alt="NitroBiome"
+                            className="h-[70px] sm:h-[84px] w-auto"
+                        />
                     </Link>
 
                     {/* Desktop Navigation */}
