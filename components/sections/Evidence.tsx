@@ -65,37 +65,53 @@ function CardWrapper({ title, children }: { title: string; children: React.React
     );
 }
 
-// Card A: Blood Pressure
+// Card A: Blood Pressure (Vertical Bars)
 function BloodPressureCard() {
+    const maxValue = 160;
+    const barHeight = 120; // px
+
     return (
         <CardWrapper title="Blood Pressure (15 min)">
-            <div className="space-y-6">
-                {bloodPressureData.map((item) => (
-                    <div key={item.name} className="space-y-2">
-                        <div className="flex justify-between items-baseline">
-                            <span className="text-sm font-semibold text-neutral-700">{item.name}</span>
-                            <span className="text-lg font-bold text-emerald-600">
-                                {item.change} mmHg
-                                <span className="text-xs text-neutral-400 ml-1">({item.percent}%)</span>
-                            </span>
+            <div className="space-y-4">
+                {/* Vertical Bar Chart */}
+                <div className="flex justify-center gap-10 lg:gap-16">
+                    {bloodPressureData.map((item) => (
+                        <div key={item.name} className="flex flex-col items-center">
+                            {/* Label */}
+                            <span className="text-sm font-semibold text-neutral-700 mb-3">{item.name}</span>
+
+                            {/* Bars Container */}
+                            <div className="flex items-end gap-3" style={{ height: barHeight }}>
+                                {/* Before Bar */}
+                                <div className="flex flex-col items-center justify-end h-full">
+                                    <span className="text-xs text-neutral-400 mb-1">{item.before}</span>
+                                    <div
+                                        className="w-10 rounded-t bg-neutral-300"
+                                        style={{ height: Math.round((item.before / maxValue) * barHeight) }}
+                                    />
+                                </div>
+                                {/* After Bar */}
+                                <div className="flex flex-col items-center justify-end h-full">
+                                    <span className="text-xs text-emerald-600 font-semibold mb-1">{item.after}</span>
+                                    <div
+                                        className="w-10 rounded-t bg-emerald-500"
+                                        style={{ height: Math.round((item.after / maxValue) * barHeight) }}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Change */}
+                            <div className="mt-4 text-center">
+                                <span className="text-xl font-bold text-emerald-600">{item.change}</span>
+                                <span className="text-xs text-neutral-400 ml-1">mmHg</span>
+                                <p className="text-xs text-neutral-400">({item.percent}%)</p>
+                            </div>
                         </div>
-                        <div className="flex gap-2 items-center h-8">
-                            <div
-                                className="h-6 rounded bg-neutral-300 transition-all duration-700"
-                                style={{ width: `${(item.before / 160) * 100}%` }}
-                            />
-                            <span className="text-xs text-neutral-400 w-8">{item.before}</span>
-                        </div>
-                        <div className="flex gap-2 items-center h-8">
-                            <div
-                                className="h-6 rounded bg-emerald-500 transition-all duration-700"
-                                style={{ width: `${(item.after / 160) * 100}%` }}
-                            />
-                            <span className="text-xs text-emerald-600 font-medium w-8">{item.after}</span>
-                        </div>
-                    </div>
-                ))}
-                <div className="flex gap-4 pt-2 text-xs text-neutral-400">
+                    ))}
+                </div>
+
+                {/* Legend */}
+                <div className="flex justify-center gap-6 pt-4 text-xs text-neutral-400">
                     <span className="flex items-center gap-1.5">
                         <span className="w-3 h-3 rounded bg-neutral-300" /> Before
                     </span>
@@ -287,6 +303,18 @@ export function Evidence({ messages }: EvidenceProps) {
                     </p>
                 </div>
 
+                {/* Why This is Different */}
+                <div className="max-w-3xl mx-auto mb-12 lg:mb-16 text-center">
+                    <h3 className="text-xs font-bold tracking-[0.2em] uppercase text-emerald-600 mb-3">
+                        Why This is Different
+                    </h3>
+                    <p className="text-sm lg:text-base text-neutral-600 leading-relaxed">
+                        Unlike L-arginine or nitrate precursors that rely on enzymatic conversion (NOS pathway),
+                        fermented metabolites deliver bioactive NO compounds directly—bypassing rate-limiting steps
+                        for faster, more consistent absorption.
+                    </p>
+                </div>
+
                 {/* Cards Grid */}
                 <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-5xl mx-auto">
                     <BloodPressureCard />
@@ -295,10 +323,13 @@ export function Evidence({ messages }: EvidenceProps) {
                     <SalivaNitriteCard />
                 </div>
 
-                {/* Study Notes */}
-                <div className="mt-12 text-center">
+                {/* Study Notes + Safety */}
+                <div className="mt-12 text-center space-y-2">
                     <p className="text-xs text-neutral-400 tracking-wide">
                         Self-controlled study; pre vs 15 min post-intake; n=12 (age 30–61)
+                    </p>
+                    <p className="text-xs text-neutral-400">
+                        No adverse effects or discomfort reported during observation period.
                     </p>
                 </div>
             </Container>
