@@ -33,24 +33,60 @@ export function LanguageToggle() {
     };
 
     return (
-        <div className="flex items-center gap-1 bg-[var(--bg-secondary)] rounded-full p-1">
+        <div
+            className="
+                relative flex items-center
+                rounded-full p-[3px]
+                backdrop-blur-xl
+                bg-white/20
+                border border-white/30
+                shadow-[0_2px_12px_-2px_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,0.4)]
+            "
+        >
+            {/* Sliding indicator */}
+            <div
+                style={{ left: currentLocale === 'en' ? 'calc(50% - 1px)' : '3px' }}
+                className="
+                    absolute top-[3px] bottom-[3px] w-[calc(50%-2px)]
+                    rounded-full
+                    bg-white/70
+                    backdrop-blur-md
+                    border border-white/50
+                    shadow-[0_2px_8px_-2px_rgba(0,0,0,0.15),inset_0_1px_2px_rgba(255,255,255,0.6)]
+                    transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]
+                    pointer-events-none
+                "
+            />
+
             <button
                 onClick={() => switchLocale('ko')}
                 aria-pressed={currentLocale === 'ko'}
-                className={`px-3 py-1 text-sm font-medium rounded-full transition-all duration-200 ${currentLocale === 'ko'
-                    ? 'bg-[var(--green-primary)] text-white'
-                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                    }`}
+                className={`
+                    relative z-10 px-4 py-1.5
+                    text-xs font-semibold tracking-wide
+                    rounded-full
+                    transition-colors duration-300
+                    ${currentLocale === 'ko'
+                        ? 'text-neutral-800'
+                        : 'text-neutral-600/70 hover:text-neutral-700'
+                    }
+                `}
             >
                 KR
             </button>
             <button
                 onClick={() => switchLocale('en')}
                 aria-pressed={currentLocale === 'en'}
-                className={`px-3 py-1 text-sm font-medium rounded-full transition-all duration-200 ${currentLocale === 'en'
-                    ? 'bg-[var(--green-primary)] text-white'
-                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                    }`}
+                className={`
+                    relative z-10 px-4 py-1.5
+                    text-xs font-semibold tracking-wide
+                    rounded-full
+                    transition-colors duration-300
+                    ${currentLocale === 'en'
+                        ? 'text-neutral-800'
+                        : 'text-neutral-600/70 hover:text-neutral-700'
+                    }
+                `}
             >
                 EN
             </button>
