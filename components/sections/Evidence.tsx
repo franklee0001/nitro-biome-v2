@@ -1,83 +1,305 @@
 'use client';
 
-import { useState } from 'react';
-import { Plus } from 'lucide-react';
 import { Messages } from '@/lib/i18n';
 import { Container } from '@/components/ui/Container';
-import { Card } from '@/components/ui/Card';
-import { evidenceCards } from '@/data/evidence-cards';
+import {
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    ResponsiveContainer,
+    LineChart,
+    Line,
+    Cell,
+    Tooltip,
+} from 'recharts';
 
 interface EvidenceProps {
     messages: Messages;
 }
 
-export function Evidence({ messages }: EvidenceProps) {
-    const [openDetails, setOpenDetails] = useState<string | null>(null);
+// ============ DATA ============
+
+// Blood Pressure Data (15 min post-intake)
+const bloodPressureData = [
+    { name: 'SBP', before: 127, after: 111, change: -16, percent: -12.6 },
+    { name: 'DBP', before: 84, after: 71, change: -13, percent: -15.4 },
+];
+
+// Hypertensive Participants (n=4)
+const hypertensiveData = [
+    { id: 1, sbpBefore: 145, sbpAfter: 124, dbpBefore: 95, dbpAfter: 80 },
+    { id: 2, sbpBefore: 152, sbpAfter: 130, dbpBefore: 98, dbpAfter: 82 },
+    { id: 3, sbpBefore: 148, sbpAfter: 128, dbpBefore: 92, dbpAfter: 78 },
+    { id: 4, sbpBefore: 142, sbpAfter: 122, dbpBefore: 90, dbpAfter: 76 },
+];
+
+// Vascular Health Grade Distribution
+const vascularGradeData = [
+    { grade: 'A', before: 1, after: 4 },
+    { grade: 'B', before: 3, after: 5 },
+    { grade: 'C', before: 5, after: 2 },
+    { grade: 'D', before: 3, after: 1 },
+];
+
+// Saliva Nitrite Timeline (qualitative levels 0-10)
+const salivaNitriteData = [
+    { time: '0', label: 'Baseline', level: 1 },
+    { time: '15', label: '15 min', level: 9 },
+    { time: '60', label: '60 min', level: 8 },
+    { time: '120', label: '120 min', level: 5 },
+    { time: '180', label: '180 min', level: 3 },
+    { time: 'AM', label: 'Next AM', level: 2 },
+];
+
+// ============ COMPONENTS ============
+
+function CardWrapper({ title, children }: { title: string; children: React.ReactNode }) {
+    return (
+        <div className="bg-white/50 backdrop-blur-sm rounded-3xl border border-neutral-200/60 p-6 lg:p-8 shadow-sm hover:shadow-lg transition-shadow duration-500">
+            <h3 className="text-xs font-bold tracking-[0.2em] uppercase text-neutral-400 mb-6">
+                {title}
+            </h3>
+            {children}
+        </div>
+    );
+}
+
+// Card A: Blood Pressure
+function BloodPressureCard() {
+    return (
+        <CardWrapper title="Blood Pressure (15 min)">
+            <div className="space-y-6">
+                {bloodPressureData.map((item) => (
+                    <div key={item.name} className="space-y-2">
+                        <div className="flex justify-between items-baseline">
+                            <span className="text-sm font-semibold text-neutral-700">{item.name}</span>
+                            <span className="text-lg font-bold text-emerald-600">
+                                {item.change} mmHg
+                                <span className="text-xs text-neutral-400 ml-1">({item.percent}%)</span>
+                            </span>
+                        </div>
+                        <div className="flex gap-2 items-center h-8">
+                            <div
+                                className="h-6 rounded bg-neutral-300 transition-all duration-700"
+                                style={{ width: `${(item.before / 160) * 100}%` }}
+                            />
+                            <span className="text-xs text-neutral-400 w-8">{item.before}</span>
+                        </div>
+                        <div className="flex gap-2 items-center h-8">
+                            <div
+                                className="h-6 rounded bg-emerald-500 transition-all duration-700"
+                                style={{ width: `${(item.after / 160) * 100}%` }}
+                            />
+                            <span className="text-xs text-emerald-600 font-medium w-8">{item.after}</span>
+                        </div>
+                    </div>
+                ))}
+                <div className="flex gap-4 pt-2 text-xs text-neutral-400">
+                    <span className="flex items-center gap-1.5">
+                        <span className="w-3 h-3 rounded bg-neutral-300" /> Before
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                        <span className="w-3 h-3 rounded bg-emerald-500" /> After
+                    </span>
+                </div>
+            </div>
+        </CardWrapper>
+    );
+}
+
+// Card B: Hypertensive Participants
+function HypertensiveCard() {
+    const avgSbpDrop = Math.round(
+        hypertensiveData.reduce((acc, d) => acc + (d.sbpBefore - d.sbpAfter), 0) / hypertensiveData.length
+    );
+    const avgDbpDrop = Math.round(
+        hypertensiveData.reduce((acc, d) => acc + (d.dbpBefore - d.dbpAfter), 0) / hypertensiveData.length
+    );
 
     return (
-        <section id="evidence" className="section py-[var(--spacing-section-y-mobile)] lg:py-[var(--spacing-section-y-desktop)] bg-[var(--color-bg-primary)]">
+        <CardWrapper title="Hypertensive Group (n=4)">
+            <div className="space-y-4">
+                <div className="grid grid-cols-5 gap-1 text-xs text-neutral-400 font-medium pb-2 border-b border-neutral-100">
+                    <span>#</span>
+                    <span>SBP↓</span>
+                    <span>DBP↓</span>
+                    <span className="col-span-2 text-right">Trend</span>
+                </div>
+                {hypertensiveData.map((p) => (
+                    <div key={p.id} className="grid grid-cols-5 gap-1 items-center text-sm">
+                        <span className="text-neutral-400">P{p.id}</span>
+                        <span className="font-semibold text-emerald-600">−{p.sbpBefore - p.sbpAfter}</span>
+                        <span className="font-semibold text-emerald-600">−{p.dbpBefore - p.dbpAfter}</span>
+                        <div className="col-span-2 h-6">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <LineChart data={[
+                                    { x: 0, y: p.sbpBefore },
+                                    { x: 1, y: p.sbpAfter },
+                                ]}>
+                                    <Line
+                                        type="linear"
+                                        dataKey="y"
+                                        stroke="#10b981"
+                                        strokeWidth={2}
+                                        dot={{ fill: '#10b981', r: 2 }}
+                                    />
+                                </LineChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </div>
+                ))}
+                <div className="pt-3 mt-2 border-t border-neutral-100 flex justify-between text-sm">
+                    <span className="text-neutral-500">Average Drop</span>
+                    <span className="font-bold text-emerald-600">SBP −{avgSbpDrop} / DBP −{avgDbpDrop}</span>
+                </div>
+            </div>
+        </CardWrapper>
+    );
+}
+
+// Card C: Vascular Health Grade
+function VascularGradeCard() {
+    const gradeColors: Record<string, string> = {
+        A: '#10b981',
+        B: '#34d399',
+        C: '#fbbf24',
+        D: '#f87171',
+    };
+
+    return (
+        <CardWrapper title="Vascular Health Grade Shift">
+            <div className="space-y-4">
+                <div className="h-32">
+                    <ResponsiveContainer width="100%" height="100%">
+                        <BarChart
+                            data={vascularGradeData}
+                            layout="vertical"
+                            margin={{ left: 0, right: 0 }}
+                        >
+                            <XAxis type="number" hide domain={[0, 6]} />
+                            <YAxis
+                                type="category"
+                                dataKey="grade"
+                                axisLine={false}
+                                tickLine={false}
+                                tick={{ fontSize: 12, fill: '#737373' }}
+                                width={24}
+                            />
+                            <Tooltip
+                                formatter={(value, name) => [value ?? 0, name === 'before' ? 'Before' : 'After']}
+                                contentStyle={{ fontSize: 12, borderRadius: 8 }}
+                            />
+                            <Bar dataKey="before" fill="#d1d5db" radius={[0, 4, 4, 0]} barSize={10} />
+                            <Bar dataKey="after" radius={[0, 4, 4, 0]} barSize={10}>
+                                {vascularGradeData.map((entry) => (
+                                    <Cell key={entry.grade} fill={gradeColors[entry.grade]} />
+                                ))}
+                            </Bar>
+                        </BarChart>
+                    </ResponsiveContainer>
+                </div>
+                <div className="flex justify-between text-xs text-neutral-400 pt-2">
+                    <span className="flex items-center gap-1.5">
+                        <span className="w-3 h-3 rounded bg-neutral-300" /> Before
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                        <span className="w-3 h-3 rounded bg-emerald-500" /> After
+                    </span>
+                </div>
+                <p className="text-xs text-neutral-500 text-center pt-2">
+                    Grade A/B increased from 4 → 9 participants
+                </p>
+            </div>
+        </CardWrapper>
+    );
+}
+
+// Card D: Saliva Nitrite Timeline
+function SalivaNitriteCard() {
+    return (
+        <CardWrapper title="Saliva Nitrite Time Course">
+            <div className="space-y-4">
+                <div className="h-36">
+                    <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={salivaNitriteData} margin={{ left: -20, right: 10, top: 10, bottom: 0 }}>
+                            <XAxis
+                                dataKey="label"
+                                axisLine={false}
+                                tickLine={false}
+                                tick={{ fontSize: 10, fill: '#a3a3a3' }}
+                                interval={0}
+                            />
+                            <YAxis
+                                hide
+                                domain={[0, 10]}
+                            />
+                            <Tooltip
+                                formatter={(value) => [`Level ${value ?? 0}`, 'Nitrite']}
+                                contentStyle={{ fontSize: 12, borderRadius: 8 }}
+                            />
+                            <Line
+                                type="monotone"
+                                dataKey="level"
+                                stroke="#10b981"
+                                strokeWidth={2.5}
+                                dot={{ fill: '#10b981', strokeWidth: 0, r: 4 }}
+                                activeDot={{ r: 6, fill: '#059669' }}
+                            />
+                        </LineChart>
+                    </ResponsiveContainer>
+                </div>
+                <div className="grid grid-cols-3 gap-2 text-center text-xs pt-2">
+                    <div className="bg-emerald-50 rounded-lg py-2 px-1">
+                        <span className="font-bold text-emerald-600">Peak</span>
+                        <p className="text-neutral-500">15 min</p>
+                    </div>
+                    <div className="bg-neutral-50 rounded-lg py-2 px-1">
+                        <span className="font-bold text-neutral-600">Sustained</span>
+                        <p className="text-neutral-500">60–120 min</p>
+                    </div>
+                    <div className="bg-neutral-50 rounded-lg py-2 px-1">
+                        <span className="font-bold text-neutral-600">Residual</span>
+                        <p className="text-neutral-500">Next AM</p>
+                    </div>
+                </div>
+            </div>
+        </CardWrapper>
+    );
+}
+
+// ============ MAIN COMPONENT ============
+
+export function Evidence({ messages }: EvidenceProps) {
+    return (
+        <section
+            id="evidence"
+            className="py-24 lg:py-32 bg-gradient-to-b from-neutral-50 to-white"
+        >
             <Container>
-                <div className="text-center mb-24">
-                    <h2 className="text-display-md text-[var(--color-text-primary)] mb-6">
+                {/* Header */}
+                <div className="text-center mb-16 lg:mb-20">
+                    <h2 className="text-3xl lg:text-4xl font-bold text-neutral-900 mb-4 tracking-tight">
                         {messages.evidence.title}
                     </h2>
-                    <p className="text-body-lg text-[var(--color-text-secondary)] max-w-2xl mx-auto opacity-80">
+                    <p className="text-lg text-neutral-500 max-w-2xl mx-auto">
                         {messages.evidence.subtitle}
                     </p>
                 </div>
 
-                <div className="grid md:grid-cols-3 gap-10">
-                    {evidenceCards.map((card) => {
-                        const cardData = messages.evidence.cards[card.id as keyof typeof messages.evidence.cards];
+                {/* Cards Grid */}
+                <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-5xl mx-auto">
+                    <BloodPressureCard />
+                    <HypertensiveCard />
+                    <VascularGradeCard />
+                    <SalivaNitriteCard />
+                </div>
 
-                        return (
-                            <Card key={card.id} className="h-full flex flex-col justify-between p-10 hover:shadow-2xl transition-all duration-700 border border-[var(--color-text-muted)]/5 bg-[var(--color-bg-secondary)]/50 backdrop-blur-sm group">
-                                <div className="text-center space-y-8">
-                                    <h3 className="text-navigation text-[var(--color-text-muted)] tracking-widest">
-                                        {cardData.title}
-                                    </h3>
-
-                                    <div className="py-4">
-                                        <div className="text-6xl lg:text-7xl font-bold text-[var(--color-green-deep)] tracking-tighter mb-2 scale-100 group-hover:scale-105 transition-transform duration-700">
-                                            {cardData.value}
-                                        </div>
-                                        <div className="text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-widest">
-                                            {cardData.unit}
-                                        </div>
-                                    </div>
-
-                                    <div className="h-px w-8 bg-[var(--color-green-primary)]/20 mx-auto" />
-
-                                    <p className="text-body-lg text-[var(--color-text-primary)] leading-relaxed font-medium">
-                                        {cardData.description}
-                                    </p>
-
-                                    {cardData.note && (
-                                        <p className="text-sm text-[var(--color-text-muted)] italic opacity-70">
-                                            {cardData.note}
-                                        </p>
-                                    )}
-                                </div>
-
-                                {/* Details Placeholder */}
-                                <div className="mt-10 pt-8 border-t border-[var(--color-text-muted)]/10">
-                                    <button
-                                        onClick={() => setOpenDetails(openDetails === card.id ? null : card.id)}
-                                        className="flex items-center justify-center gap-3 w-full text-sm font-bold text-[var(--color-green-primary)] hover:text-[var(--color-green-deep)] transition-colors uppercase tracking-widest mb-2"
-                                    >
-                                        <Plus size={14} className={`transition-transform duration-500 ${openDetails === card.id ? 'rotate-45' : ''}`} />
-                                        <span>Details</span>
-                                    </button>
-
-                                    <div className={`overflow-hidden transition-all duration-700 ease-[var(--ease-apple)] ${openDetails === card.id ? 'max-h-32 opacity-100 mt-6' : 'max-h-0 opacity-0'}`}>
-                                        <div className="text-xs text-[var(--color-text-muted)] leading-relaxed text-center bg-[var(--color-bg-primary)]/80 p-5 rounded-2xl border border-[var(--color-text-muted)]/5">
-                                            Clinical methodology and full dataset available in the technical whitepaper.
-                                        </div>
-                                    </div>
-                                </div>
-                            </Card>
-                        );
-                    })}
+                {/* Study Notes */}
+                <div className="mt-12 text-center">
+                    <p className="text-xs text-neutral-400 tracking-wide">
+                        Self-controlled study; pre vs 15 min post-intake; n=12 (age 30–61)
+                    </p>
                 </div>
             </Container>
         </section>
