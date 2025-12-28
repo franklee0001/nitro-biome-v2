@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
+import { FloatingContactButton } from '@/components/ui/FloatingContactButton';
 import { SmoothScrollProvider } from '@/providers/SmoothScrollProvider';
 import { getMessages, isValidLocale, type Locale } from '@/lib/i18n';
 
@@ -30,6 +31,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         <SmoothScrollProvider>
             <Header messages={messages} />
             <main>{children}</main>
+            <FloatingContactButton />
         </SmoothScrollProvider>
     );
 }
