@@ -4,10 +4,11 @@ import { Messages } from '@/lib/i18n';
 import { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
-// Register GSAP plugin
+// Register GSAP plugins
 if (typeof window !== 'undefined') {
-    gsap.registerPlugin(ScrollTrigger);
+    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 }
 
 interface NOPrimerProps {
@@ -142,10 +143,26 @@ export function NOPrimer({ messages }: NOPrimerProps) {
                     end: SCROLL_DURATION,
                     pin: true,
                     pinSpacing: true,
-                    scrub: 0.8, // Slightly faster scrub for more responsive feel
+                    scrub: 0.8,
                     anticipatePin: 1,
                     animation: tl,
                     invalidateOnRefresh: true,
+                    snap: {
+                        snapTo: 1 / (stepCount - 1), // Snap to each step (0, 0.33, 0.67, 1)
+                        duration: { min: 0.2, max: 0.4 },
+                        ease: 'power2.inOut',
+                    },
+                    onLeave: () => {
+                        // Snap to next section when all steps complete
+                        const nextSection = document.getElementById('mechanism');
+                        if (nextSection) {
+                            gsap.to(window, {
+                                scrollTo: { y: nextSection, autoKill: false },
+                                duration: 0.6,
+                                ease: 'power2.inOut',
+                            });
+                        }
+                    },
                 });
             });
         }, sectionRef);

@@ -3,11 +3,12 @@
 import { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import { scrollConfig } from '@/config/scroll';
 
-// Register plugin once
+// Register plugins once
 if (typeof window !== 'undefined') {
-    gsap.registerPlugin(ScrollTrigger);
+    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 }
 
 interface UseHeroScrollVideoOptions {
@@ -116,6 +117,17 @@ export function useHeroScrollVideo({ enabled = true }: UseHeroScrollVideoOptions
                     // Update target time (damping happens in RAF loop)
                     const newTarget = self.progress * duration;
                     targetTimeRef.current = Math.max(0, Math.min(newTarget, duration - 0.01));
+                },
+                onLeave: () => {
+                    // Snap to next section when Hero video completes
+                    const nextSection = document.getElementById('no-primer');
+                    if (nextSection) {
+                        gsap.to(window, {
+                            scrollTo: { y: nextSection, autoKill: false },
+                            duration: 0.6,
+                            ease: 'power2.inOut',
+                        });
+                    }
                 },
             });
 
