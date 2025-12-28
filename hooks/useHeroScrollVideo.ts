@@ -25,12 +25,14 @@ export function useHeroScrollVideo({ enabled = true }: UseHeroScrollVideoOptions
     const pinRef = useRef<HTMLDivElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
 
-    // Refs for RAF-based damping
+    // Refs for RAF-based seeking
     const targetTimeRef = useRef(0);
-    const currentTimeRef = useRef(0);
     const rafIdRef = useRef<number | null>(null);
     const triggerRef = useRef<ScrollTrigger | null>(null);
     const videoDurationRef = useRef(0);
+
+    // Seek threshold to prevent seek spam (only seek when diff > this value)
+    const SEEK_THRESHOLD = 0.04; // ~1 frame at 24fps
 
     useLayoutEffect(() => {
         if (!enabled) {
@@ -51,27 +53,29 @@ export function useHeroScrollVideo({ enabled = true }: UseHeroScrollVideoOptions
             return;
         }
 
-        const { heroDampingLerp, heroScrub, heroBaseScrollDistanceVh, heroScrollPerSecondVh } = scrollConfig.scrollTrigger;
+        const { heroScrub, heroBaseScrollDistanceVh, heroScrollPerSecondVh } = scrollConfig.scrollTrigger;
 
-        // RAF-based damping loop
+        // RAF-based seeking with threshold to prevent seek spam
         const updateVideoTime = () => {
             const video = videoRef.current;
-            if (!video || video.seeking) {
-                // Skip update while seeking to avoid jumpy behavior
+            if (!video) {
                 rafIdRef.current = requestAnimationFrame(updateVideoTime);
                 return;
             }
 
-            const target = targetTimeRef.current;
-            const current = currentTimeRef.current;
+            // Skip if video is not ready or currently seeking
+            if (video.readyState < 2 || video.seeking) {
+                rafIdRef.current = requestAnimationFrame(updateVideoTime);
+                return;
+            }
 
-            // Lerp towards target
-            const diff = target - current;
-            if (Math.abs(diff) > 0.001) {
-                const newTime = current + diff * heroDampingLerp;
-                const clampedTime = Math.max(0, Math.min(newTime, videoDurationRef.current - 0.01));
+            const targetTime = targetTimeRef.current;
+            const currentTime = video.currentTime;
+            const diff = targetTime - currentTime;
 
-                currentTimeRef.current = clampedTime;
+            // Only seek when difference exceeds threshold
+            if (Math.abs(diff) > SEEK_THRESHOLD) {
+                const clampedTime = Math.max(0, Math.min(targetTime, videoDurationRef.current - 0.01));
                 video.currentTime = clampedTime;
             }
 
@@ -90,7 +94,6 @@ export function useHeroScrollVideo({ enabled = true }: UseHeroScrollVideoOptions
             // Pause and reset
             video.pause();
             video.currentTime = 0;
-            currentTimeRef.current = 0;
             targetTimeRef.current = 0;
 
             // Calculate dynamic scroll distance
@@ -156,7 +159,6 @@ export function useHeroScrollVideo({ enabled = true }: UseHeroScrollVideoOptions
 
             // Reset refs
             targetTimeRef.current = 0;
-            currentTimeRef.current = 0;
             videoDurationRef.current = 0;
         };
     }, [enabled]);
