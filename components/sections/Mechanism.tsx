@@ -1,5 +1,6 @@
 'use client';
 
+import { useRef, useEffect } from 'react';
 import { Droplets, Zap, Heart, Flame, Clock } from 'lucide-react';
 import { Messages } from '@/lib/i18n';
 import { Container } from '@/components/ui/Container';
@@ -17,6 +18,32 @@ const steps = [
 ];
 
 export function Mechanism({ messages }: MechanismProps) {
+    const videoRef = useRef<HTMLVideoElement>(null);
+
+    // Auto-play video when in view
+    useEffect(() => {
+        const video = videoRef.current;
+        if (!video) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        video.play().catch(() => {
+                            // Autoplay blocked, that's ok
+                        });
+                    } else {
+                        video.pause();
+                    }
+                });
+            },
+            { threshold: 0.3 }
+        );
+
+        observer.observe(video);
+        return () => observer.disconnect();
+    }, []);
+
     return (
         <section id="mechanism" className="py-24 lg:py-32 bg-white">
             <Container>
@@ -30,40 +57,66 @@ export function Mechanism({ messages }: MechanismProps) {
                     </p>
                 </div>
 
-                {/* Steps Grid */}
-                <div className="max-w-4xl mx-auto">
-                    <div className="grid gap-4 lg:gap-6">
-                        {steps.map((step, index) => {
-                            const Icon = step.icon;
-                            const sceneData = messages.mechanism.scenes[step.id as keyof typeof messages.mechanism.scenes];
+                {/* Two Column Layout: Video + Steps */}
+                <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
-                            return (
-                                <div
-                                    key={step.id}
-                                    className="flex items-start gap-4 lg:gap-6 p-6 bg-neutral-50 rounded-2xl border border-neutral-100 hover:border-neutral-200 transition-colors"
-                                >
-                                    {/* Step Number + Icon */}
-                                    <div className="flex-shrink-0 flex flex-col items-center gap-2">
-                                        <span className="text-xs font-bold text-neutral-300">
-                                            {String(index + 1).padStart(2, '0')}
-                                        </span>
-                                        <div className={`w-12 h-12 rounded-xl ${step.bg} flex items-center justify-center`}>
-                                            <Icon size={24} className={step.color} />
+                    {/* Video Column */}
+                    <div className="order-2 lg:order-1">
+                        <div className="relative rounded-3xl overflow-hidden bg-white shadow-2xl border border-neutral-100">
+                            {/* Video */}
+                            <video
+                                ref={videoRef}
+                                src="/mechanism/blood-flow.mp4"
+                                muted
+                                loop
+                                playsInline
+                                className="w-full h-auto aspect-square object-cover"
+                            />
+
+                            {/* Caption */}
+                            <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-white via-white/80 to-transparent">
+                                <p className="text-xs text-neutral-500 text-center">
+                                    Blood flow visualization
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Steps Column */}
+                    <div className="order-1 lg:order-2">
+                        <div className="grid gap-4">
+                            {steps.map((step, index) => {
+                                const Icon = step.icon;
+                                const sceneData = messages.mechanism.scenes[step.id as keyof typeof messages.mechanism.scenes];
+
+                                return (
+                                    <div
+                                        key={step.id}
+                                        className="flex items-start gap-4 p-4 lg:p-5 bg-neutral-50 rounded-2xl border border-neutral-100 hover:border-neutral-200 hover:bg-neutral-100/50 transition-all duration-300"
+                                    >
+                                        {/* Step Number + Icon */}
+                                        <div className="flex-shrink-0 flex flex-col items-center gap-1.5">
+                                            <span className="text-[10px] font-bold text-neutral-300">
+                                                {String(index + 1).padStart(2, '0')}
+                                            </span>
+                                            <div className={`w-10 h-10 rounded-xl ${step.bg} flex items-center justify-center`}>
+                                                <Icon size={20} className={step.color} />
+                                            </div>
+                                        </div>
+
+                                        {/* Content */}
+                                        <div className="flex-1 min-w-0">
+                                            <h3 className="text-base font-semibold text-neutral-900 mb-0.5">
+                                                {sceneData?.title}
+                                            </h3>
+                                            <p className="text-sm text-neutral-500 leading-relaxed">
+                                                {sceneData?.description}
+                                            </p>
                                         </div>
                                     </div>
-
-                                    {/* Content */}
-                                    <div className="flex-1 min-w-0">
-                                        <h3 className="text-lg font-semibold text-neutral-900 mb-1">
-                                            {sceneData?.title}
-                                        </h3>
-                                        <p className="text-sm text-neutral-500 leading-relaxed">
-                                            {sceneData?.description}
-                                        </p>
-                                    </div>
-                                </div>
-                            );
-                        })}
+                                );
+                            })}
+                        </div>
                     </div>
                 </div>
             </Container>
