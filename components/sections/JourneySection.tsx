@@ -95,12 +95,24 @@ export function JourneySection({ messages }: JourneySectionProps) {
         return () => window.removeEventListener('resize', update);
     }, [measureHeadline, computeScales, journey.headline]);
 
+    // Store context ref outside setTimeout for proper cleanup
+    const ctxRef = useRef<gsap.Context | null>(null);
+
     useLayoutEffect(() => {
         const section = sectionRef.current;
         if (!section) return;
 
+        // Kill any existing context before creating new one
+        if (ctxRef.current) {
+            ctxRef.current.revert();
+            ctxRef.current = null;
+        }
+
         const timeoutId = setTimeout(() => {
-            const ctx = gsap.context(() => {
+            // Double-check section still exists
+            if (!sectionRef.current) return;
+
+            ctxRef.current = gsap.context(() => {
                 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
                 const starGroup = starGroupRef.current;
@@ -109,7 +121,6 @@ export function JourneySection({ messages }: JourneySectionProps) {
                 const cardWrapper = cardWrapperRef.current;
 
                 if (!starGroup || !headlineBlock || !headlineText || !cardWrapper) {
-                    console.warn('[JourneySection] Missing refs');
                     return;
                 }
 
@@ -119,6 +130,7 @@ export function JourneySection({ messages }: JourneySectionProps) {
                     gsap.set(cardWrapper, { opacity: 1, y: 0, filter: 'blur(0px)' });
 
                     ScrollTrigger.create({
+                        id: 'JourneySection',
                         trigger: section,
                         start: 'top top',
                         end: '+=100vh',
@@ -151,8 +163,7 @@ export function JourneySection({ messages }: JourneySectionProps) {
                     duration: PHASE.HEADLINE_FADE_END - PHASE.HEADLINE_FADE_START,
                 }, PHASE.HEADLINE_FADE_START);
 
-                // Star HOLE expands - animating the mask group scale
-                // This makes the transparent window grow, revealing more background
+                // Star HOLE expands
                 tl.to(starGroup, {
                     scale: scales.final,
                     ease: 'power2.inOut',
@@ -169,6 +180,7 @@ export function JourneySection({ messages }: JourneySectionProps) {
                 }, PHASE.CARD_START);
 
                 ScrollTrigger.create({
+                    id: 'JourneySection',
                     trigger: section,
                     start: 'top top',
                     end: '+=300vh',
@@ -180,17 +192,18 @@ export function JourneySection({ messages }: JourneySectionProps) {
                     invalidateOnRefresh: true,
                 });
             }, section);
-
-            return () => ctx.revert();
         }, 100);
 
-        return () => clearTimeout(timeoutId);
+        // Proper cleanup: kill context AND clear timeout
+        return () => {
+            clearTimeout(timeoutId);
+            if (ctxRef.current) {
+                ctxRef.current.revert();
+                ctxRef.current = null;
+            }
+        };
     }, [scales]);
 
-    useEffect(() => {
-        const timer = setTimeout(() => ScrollTrigger.refresh(), 200);
-        return () => clearTimeout(timer);
-    }, [ruleWidth, scales]);
 
     return (
         <section
@@ -219,7 +232,12 @@ export function JourneySection({ messages }: JourneySectionProps) {
                     fill
                     className="object-cover"
                     priority
-                    onLoad={() => setTimeout(() => ScrollTrigger.refresh(), 100)}
+                    onLoad={() => {
+                        // Only refresh if user is at top (not mid-scroll through pinned sections)
+                        if (window.scrollY < 100) {
+                            setTimeout(() => ScrollTrigger.refresh(), 100);
+                        }
+                    }}
                 />
                 <div className="absolute inset-0 bg-black/10 pointer-events-none" aria-hidden="true" />
             </div>

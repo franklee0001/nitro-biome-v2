@@ -4,11 +4,10 @@ import { Messages } from '@/lib/i18n';
 import { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
 // Register GSAP plugins
 if (typeof window !== 'undefined') {
-    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+    gsap.registerPlugin(ScrollTrigger);
 }
 
 interface NOPrimerProps {
@@ -48,7 +47,10 @@ export function NOPrimer({ messages }: NOPrimerProps) {
         img.src = '/sections/forest.jpg';
         img.onload = () => {
             setImageLoaded(true);
-            setTimeout(() => ScrollTrigger.refresh(), 100);
+            // Only refresh if user is at top (not mid-scroll through pinned sections)
+            if (window.scrollY < 100) {
+                setTimeout(() => ScrollTrigger.refresh(), 100);
+            }
         };
         img.onerror = () => {
             setImageError(true);
@@ -136,6 +138,7 @@ export function NOPrimer({ messages }: NOPrimerProps) {
                 }
 
                 // 3. Create ScrollTrigger with the timeline
+                // NOTE: snap removed to prevent conflicts with Lenis smooth scroll
                 ScrollTrigger.create({
                     id: 'NOPrimer',
                     trigger: section,
@@ -147,22 +150,6 @@ export function NOPrimer({ messages }: NOPrimerProps) {
                     anticipatePin: 1,
                     animation: tl,
                     invalidateOnRefresh: true,
-                    snap: {
-                        snapTo: 1 / (stepCount - 1), // Snap to each step (0, 0.33, 0.67, 1)
-                        duration: { min: 0.2, max: 0.4 },
-                        ease: 'power2.inOut',
-                    },
-                    onLeave: () => {
-                        // Snap to next section when all steps complete
-                        const nextSection = document.getElementById('mechanism');
-                        if (nextSection) {
-                            gsap.to(window, {
-                                scrollTo: { y: nextSection, autoKill: false },
-                                duration: 0.6,
-                                ease: 'power2.inOut',
-                            });
-                        }
-                    },
                 });
             });
         }, sectionRef);
