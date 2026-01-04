@@ -46,30 +46,51 @@
         "cta": "Learn More"
     },
     "mechanism": {
-        "title": "The Mechanism",
-        "subtitle": "What happens inside your body after intake",
-        "scenes": {
-            "intake": {
-                "title": "Intake",
-                "description": "Precursor flow begins."
+        "title": "5 Minutes to Activate Your Blood Vessels",
+        "steps": [
+            {
+                "id": "step0",
+                "time": "Minute 00",
+                "title": "Start your day with one stick",
+                "description": "Take one stick (20mL) of NitroBiome. 100% natural vegetable fermentation extract and nanobubble hydrogen water begin your vascular health journey."
             },
-            "conversion": {
-                "title": "Conversion",
-                "description": "NO3 → NO2 → NO"
+            {
+                "id": "step1",
+                "time": "5 min",
+                "title": "NO activation begins in your mouth",
+                "description": "Nanobubble technology enables instant absorption through your oral mucosa. Beneficial oral bacteria rapidly activate the NO production pathway."
             },
-            "vessel": {
-                "title": "Vessel Widening",
-                "description": "Vessel relaxes, wider flow."
+            {
+                "id": "step2",
+                "time": "15 min",
+                "title": "Your blood pressure starts to respond",
+                "description": "NO activity levels rise dramatically. Average systolic BP decreases by 16mmHg, diastolic by 13mmHg."
             },
-            "flow": {
-                "title": "Peripheral Warmth",
-                "description": "Flow reaches hands/feet, warmth."
+            {
+                "id": "step3",
+                "time": "30 min",
+                "title": "Full-body circulation activates",
+                "description": "Blood-salivary gland recirculation system activates. NO relaxes blood vessels throughout your body."
             },
-            "sustain": {
-                "title": "Sustain Rhythm",
-                "description": "Steady rhythm/flow lines."
+            {
+                "id": "step4",
+                "time": "2 hours",
+                "title": "Sustained NO delivery continues",
+                "description": "NO production markers remain above normal range. Blood pressure reduction effect continues steadily."
+            },
+            {
+                "id": "step5",
+                "time": "3 hours",
+                "title": "Your blood vessels are getting younger",
+                "description": "NO protects endothelial cells and restores vascular elasticity. Vascular Health Index (VHI) improvement continues."
+            },
+            {
+                "id": "step6",
+                "time": "Next Day",
+                "title": "Protection continues through the morning",
+                "description": "NO activity signals are still detectable the next morning. With daily intake, this protective effect is maintained 24 hours continuously."
             }
-        }
+        ]
     },
     "evidence": {
         "title": "Real Data",
