@@ -10,6 +10,20 @@
     "header": {
         "cta": "Contact Us"
     },
+    "postHeroActionCards": {
+        "check": {
+            "title": "Check Your Vascular Age",
+            "subtitle": "Quick questionnaire to assess your vascular health",
+            "tooltip": "3 min",
+            "button": "Start"
+        },
+        "report": {
+            "title": "NitroBiome Research Report",
+            "subtitle": "Scientific evidence for fermentation-based NO delivery",
+            "tooltip": "PDF Download",
+            "button": "Learn More"
+        }
+    },
     "hero": {
         "headline": "A Fast Nitric Oxide activation flow you can feel",
         "subheadline": "Fermentation-based metabolites + nanobubble delivery",

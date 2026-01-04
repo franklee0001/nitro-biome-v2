@@ -10,6 +10,20 @@
     "header": {
         "cta": "문의하기"
     },
+    "postHeroActionCards": {
+        "check": {
+            "title": "나의 혈관나이 검사하기",
+            "subtitle": "간단한 문진으로 혈관 건강 상태를 확인해보세요",
+            "tooltip": "3분 소요",
+            "button": "시작하기"
+        },
+        "report": {
+            "title": "나이트로바이옴 연구보고서",
+            "subtitle": "발효 대사체 기반 NO 공급의 과학적 근거",
+            "tooltip": "PDF 다운로드",
+            "button": "더 알아보기"
+        }
+    },
     "hero": {
         "headline": "5분 안에 느껴지는 NO 활성 흐름.",
         "subheadline": "발효 기반 대사물 + 나노버블 전달",
