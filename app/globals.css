@@ -180,3 +180,111 @@ html.lenis body {
     scroll-behavior: auto !important;
   }
 }
+
+/* ============================================
+   Floating Marquee Wall - Dark Lab Theme
+   ============================================ */
+
+:root {
+  --color-dark-lab: #0A0A0B;
+  --color-dark-lab-card: rgba(255, 255, 255, 0.03);
+  --color-dark-lab-border: rgba(255, 255, 255, 0.08);
+  --color-dark-lab-text: rgba(255, 255, 255, 0.9);
+  --color-dark-lab-muted: rgba(255, 255, 255, 0.5);
+  --color-accent-mint: rgba(74, 222, 128, 0.8);
+}
+
+/* Marquee Animation - Seamless Loop */
+@keyframes marquee-left {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-right {
+  from {
+    transform: translateX(-50%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Floating Animation - Subtle Hovering Effect */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-8px) rotate(0.5deg);
+  }
+}
+
+/* Marquee Rail Styles */
+.marquee-rail {
+  display: flex;
+  gap: 24px;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.marquee-rail-left {
+  animation-name: marquee-left;
+}
+
+.marquee-rail-right {
+  animation-name: marquee-right;
+}
+
+/* Hover Interaction - Pause on Container Hover */
+.marquee-container:hover .marquee-rail {
+  animation-play-state: paused;
+}
+
+/* Review Card - Glassmorphism */
+.review-card {
+  width: 360px;
+  min-height: 200px;
+  flex-shrink: 0;
+  padding: 24px;
+  border-radius: 20px;
+  background: var(--color-dark-lab-card);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--color-dark-lab-border);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  animation: float 6s ease-in-out infinite;
+  transition: transform 0.3s ease, opacity 0.3s ease, z-index 0s;
+}
+
+.review-card:hover {
+  transform: scale(1.03);
+  z-index: 10;
+}
+
+.review-card:hover .review-card-body {
+  opacity: 1;
+}
+
+/* Mobile Responsive */
+@media (max-width: 767px) {
+  .review-card {
+    width: 280px;
+    min-height: 180px;
+    padding: 20px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .review-card {
+    width: 320px;
+  }
+}

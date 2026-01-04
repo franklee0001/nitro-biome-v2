@@ -1,6 +1,7 @@
 import { getMessages, type Locale } from '@/lib/i18n';
 import { Hero } from '@/components/sections/Hero';
 import { DualPromo } from '@/components/sections/DualPromo';
+import { MarqueeWall } from '@/components/sections/MarqueeWall';
 import { NOPrimer } from '@/components/sections/NOPrimer';
 import { JourneySection } from '@/components/sections/JourneySection';
 import { Mechanism } from '@/components/sections/Mechanism';
@@ -22,6 +23,7 @@ export default async function Page({ params }: PageProps) {
         <>
             <Hero messages={messages} />
             <DualPromo />
+            <MarqueeWall messages={messages} />
             <NOPrimer messages={messages} />
             <JourneySection messages={messages} />
             <Mechanism messages={messages} />

@@ -137,6 +137,134 @@
             "trust": "We reply within 1–2 business days"
         }
     },
+    "marqueeWall": {
+        "label": "Real Experiences",
+        "headline": "What people felt\nafter NitroBiome®",
+        "subCopy": "From quick reactions to routine feedback, hear real voices from our users.",
+        "cta": "See all stories",
+        "reviews": [
+            {
+                "tag": "Routine",
+                "body": "I take one stick every morning. Afternoon fatigue has definitely decreased.",
+                "author": "K. H."
+            },
+            {
+                "tag": "Focus",
+                "body": "Taking it before work helps me stay sharp through long meetings.",
+                "author": "J. L."
+            },
+            {
+                "tag": "Workout",
+                "body": "My pre-workout pump feels stronger. Recovery seems faster too.",
+                "author": "M. P."
+            },
+            {
+                "tag": "Morning",
+                "body": "I feel more awake without needing extra coffee. Natural energy boost.",
+                "author": "S. K."
+            },
+            {
+                "tag": "Energy",
+                "body": "The warmth spreads quickly. I can feel blood flow improving.",
+                "author": "Y. C."
+            },
+            {
+                "tag": "Routine",
+                "body": "Been using it for 3 months now. My circulation has noticeably improved.",
+                "author": "H. J."
+            },
+            {
+                "tag": "Focus",
+                "body": "Mental clarity improved. I finish tasks faster than before.",
+                "author": "D. W."
+            },
+            {
+                "tag": "Workout",
+                "body": "Endurance during cardio sessions has improved significantly.",
+                "author": "T. M."
+            },
+            {
+                "tag": "Morning",
+                "body": "Starting each day with NitroBiome has become a healthy habit.",
+                "author": "R. S."
+            },
+            {
+                "tag": "Energy",
+                "body": "Even on busy days, I maintain consistent energy levels.",
+                "author": "A. K."
+            },
+            {
+                "tag": "Routine",
+                "body": "My wife noticed my complexion looks healthier. Pleasant surprise.",
+                "author": "C. L."
+            },
+            {
+                "tag": "Focus",
+                "body": "Recommended by a colleague. Now I understand why they love it.",
+                "author": "E. P."
+            },
+            {
+                "tag": "Workout",
+                "body": "Post-exercise recovery feels smoother. Less muscle stiffness.",
+                "author": "B. N."
+            },
+            {
+                "tag": "Morning",
+                "body": "The taste is mild and pleasant. Easy to take daily.",
+                "author": "G. Y."
+            },
+            {
+                "tag": "Energy",
+                "body": "My hands and feet feel warmer. Great for cold office days.",
+                "author": "F. O."
+            },
+            {
+                "tag": "Routine",
+                "body": "Quality sleep has improved since I started taking it regularly.",
+                "author": "I. U."
+            },
+            {
+                "tag": "Focus",
+                "body": "Brain fog during afternoon slump is much less now.",
+                "author": "L. Q."
+            },
+            {
+                "tag": "Workout",
+                "body": "Muscle pumps during weight training are more pronounced.",
+                "author": "N. V."
+            },
+            {
+                "tag": "Morning",
+                "body": "I feel the boost within 10 minutes. Very noticeable effect.",
+                "author": "O. X."
+            },
+            {
+                "tag": "Energy",
+                "body": "Helps me power through late-night study sessions.",
+                "author": "P. Z."
+            },
+            {
+                "tag": "Routine",
+                "body": "My doctor noticed improved blood work results. Impressed.",
+                "author": "Q. A."
+            },
+            {
+                "tag": "Focus",
+                "body": "More productive workdays. Less afternoon drowsiness.",
+                "author": "U. B."
+            },
+            {
+                "tag": "Workout",
+                "body": "My running times have improved. Breathing feels easier.",
+                "author": "V. D."
+            },
+            {
+                "tag": "Morning",
+                "body": "Perfect addition to my morning wellness routine.",
+                "author": "W. E."
+            }
+        ]
+    },
     "footer": {
         "copyright": "© 2025 NitroBiome. All rights reserved."
     }
